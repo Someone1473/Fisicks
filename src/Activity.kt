@@ -3,25 +3,36 @@ import activityTypes.*
 
 class Activity {
     val date = LocalDate.now()
-    var activities: List<activityType> = listOf()
+    var plannedActivities: List<ActivityType> = listOf()
+    var finishedActivities: List<ActivityType> = listOf()
     var finished = false
-    var netPoints = 0
+    var plannedNetPoints = 0
+    var finishedNetPoints = 0
+    var actualNetPoints = 0
 
-    private fun count(): Int{
+    private fun count(listOfActivities: List<ActivityType>): Int{
 
-        for (i in activities){
-            netPoints += i.points
+        var answer = 0
+
+        for (i in listOfActivities){
+            answer += i.points
         }
 
-        return netPoints
+        return answer
     }
 
 
-    fun plan(){
+    fun plan(plannedActivityNot: List<ActivityType>){
+        plannedActivities = plannedActivityNot
+        plannedNetPoints = this.count(plannedActivities)
 
     }
 
-    fun review(){
+    fun review(finishedActivitesNot: List<ActivityType>){
+        finishedActivities = finishedActivitesNot
+        finishedNetPoints = this.count(finishedActivities)
+        actualNetPoints = finishedNetPoints - (plannedNetPoints - finishedNetPoints).div(5)
+        finished = true
 
     }
 

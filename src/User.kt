@@ -25,9 +25,9 @@ class User {
 
     fun addPoints(newActivity: Activity){
         if (dateOfLastActivity.year == newActivity.date.year && dateOfLastActivity.month == newActivity.date.month){
-            monthlyPoints += newActivity.netPoints
+            monthlyPoints += newActivity.actualNetPoints
         } else{
-            monthlyPoints = newActivity.netPoints
+            monthlyPoints = newActivity.actualNetPoints
         }
     }
 
