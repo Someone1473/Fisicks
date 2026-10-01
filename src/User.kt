@@ -11,13 +11,16 @@ class User {
     var goal = ""
     var goalDate = LocalDate.parse("2026--07--04")
     var dateOfLastActivity = LocalDate.parse("0067--06--07")
+    val streakFreezePrice = 50
 
     fun findStreak(){
 
     }
 
     fun updateLongestStreak(){
-
+        if (streak > longestStreak){
+            longestStreak = streak
+        }
     }
 
     fun addPoints(newActivity: Activity){
@@ -28,9 +31,21 @@ class User {
         }
     }
 
-    fun buyStreakFreeze(){
-
+    fun buyStreakFreeze(amount: Int){
+        if (points > streakFreezePrice * amount){
+            points -= streakFreezePrice * amount
+            streakFreezes += amount
+        }
     }
+
+    fun monthlyPointsGoalRewardCheck(){
+        if (monthlyPoints >= monthlyPointsGoal){
+            points += monthlyPointsGoal.div(4)
+        }
+    }
+
+
+
 
 
 
