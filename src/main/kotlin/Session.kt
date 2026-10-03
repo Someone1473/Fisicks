@@ -1,8 +1,11 @@
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 import main.activityTypes.ActivityType
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
-class Activity {
-    val date = LocalDate.parse("0067-6-7")
+@Serializable
+class Session {
+    var date = LocalDate.parse("0067-6-7")
     var plannedActivities: List<ActivityType> = listOf()
     var finishedActivities: List<ActivityType> = listOf()
     var finished = false
@@ -22,14 +25,15 @@ class Activity {
     }
 
 
-    fun plan(plannedActivityNot: List<ActivityType>){
+    fun plan(plannedActivityNot: List<ActivityType>, SessionDate: LocalDate){
         plannedActivities = plannedActivityNot
         plannedNetPoints = this.count(plannedActivities)
+        date = SessionDate
 
     }
 
-    fun review(finishedActivitesNot: List<ActivityType>){
-        finishedActivities = finishedActivitesNot
+    fun review(finishedActivitiesNot: List<ActivityType>){
+        finishedActivities = finishedActivitiesNot
         finishedNetPoints = this.count(finishedActivities)
         actualNetPoints = finishedNetPoints - (plannedNetPoints - finishedNetPoints).div(5)
         finished = true
