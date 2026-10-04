@@ -21,10 +21,11 @@ fun main(){
     var todaySession: Session?
     var numberOfStreakFreezes: Any?
     var userGoal: Any?
+    theUser.findStreak(thePhysCalendar)
 
     println("Fisicks (Pre-Alpha)")
     println("--------------------------")
-    println("Streak: ${theUser.findStreak(thePhysCalendar)}")
+    println("Streak: ${theUser.streak}")
     println("--------------------------")
 
     while (true) {
@@ -132,6 +133,7 @@ fun main(){
         theGoal.saveGoal()
         thePhysCalendar.saveCalendar()
         theUser.saveUser()
+        theUser.findStreak(thePhysCalendar)
 
     }
 
