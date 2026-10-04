@@ -1,3 +1,4 @@
+import customErrors.InvalidCompException
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -11,7 +12,7 @@ class Goal {
 
 
 
-    fun preset(comp: String, compYear: Int) {
+    fun preset(comp: String) {
         if (comp == "ipho") {
             goal = "IPhO"
             goalDate = LocalDate.parse("2028-07-01")
@@ -26,6 +27,8 @@ class Goal {
             goal = "AuPhO"
             goalDate = LocalDate.parse("2027-06-27")
             goalCareerPoints = 3600
+        } else {
+            throw InvalidCompException("Please enter a valid competition.")
         }
     }
 

@@ -4,15 +4,12 @@ import PhysCalendar
 import Session
 import User
 import activityTypes.allActivities
+import customErrors.InvalidCompException
 import kotlinx.datetime.LocalDate
 import main.activityTypes.ActivityType
 import main.customErrors.InsufficientPointsException
 
 fun main(){
-
-    println("Fisicks (Pre-Alpha)")
-    println("--------------------------")
-
     var theUser = User()
     var thePhysCalendar = PhysCalendar()
     var theGoal = Goal()
@@ -23,7 +20,12 @@ fun main(){
     var activitiesButCorrectType = mutableListOf<ActivityType>()
     var todaySession: Session?
     var numberOfStreakFreezes: Any?
+    var userGoal: Any?
 
+    println("Fisicks (Pre-Alpha)")
+    println("--------------------------")
+    println("Streak: ${theUser.findStreak(thePhysCalendar)}")
+    println("--------------------------")
 
     while (true) {
 
@@ -51,7 +53,7 @@ fun main(){
                 var inputtedDate = LocalDate.parse(readln())
                 thePhysCalendar.addSession(activitiesButCorrectType, inputtedDate)
 
-            } catch(error: java.time.format.DateTimeParseException){
+            } catch(e: java.time.format.DateTimeParseException){
                 error("Please type in a date of format of yyyy-mm-dd.")
             }
 
@@ -66,7 +68,7 @@ fun main(){
                 if (userActivityInput != null){
                     activitiesButCorrectType.add(userActivityInput)
                 } else {
-                    throw IllegalArgumentException("Please enter in valid activity names, each one separated by a space.")
+                    println ("IllegalArgumentException, Please enter in valid activity names, each one separated by a space.")
                 }
             }
 
@@ -74,8 +76,8 @@ fun main(){
                 var inputtedDate = LocalDate.parse(readln())
                 thePhysCalendar.reviewSession(activitiesButCorrectType, inputtedDate)
 
-            } catch(error: java.time.format.DateTimeParseException){
-                error("Please type in a date of format of yyyy-mm-dd.")
+            } catch(e: java.time.format.DateTimeParseException){
+
             }
 
 
@@ -100,24 +102,37 @@ fun main(){
                 try{
                     theUser.buyStreakFreeze(numberOfStreakFreezes)
 
-                } catch(error: InsufficientPointsException){
-                    println(error)
+                } catch(e: InsufficientPointsException){
+                    println(e.message)
                 }
-            } catch (error: NumberFormatException){
-                error("Please an integer value.")
+            } catch (e: NumberFormatException){
+                println(e.message)
             }
 
 
         } else if (command == "setGoal") {
+            userGoal = readln()
+
+            if (userGoal is String){
+                userGoal.lowercase()
+                try {
+                    theGoal.preset(userGoal)
+                } catch(e: InvalidCompException){
+                    println(e.message)
+                }
+
+            } else {
+                println("IllegalArgumentException, Please enter in a string")
+            }
 
         } else {
-            println("Please insert a valid command.")
+            println("IllegalArgumentException, Please insert a valid command.")
         }
 
+        theGoal.saveGoal()
+        thePhysCalendar.saveCalendar()
+        theUser.saveUser()
+
     }
-
-    //TODO: The point checks and stuff
-
-
 
 }

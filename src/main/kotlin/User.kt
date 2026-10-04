@@ -60,7 +60,7 @@ class User {
             streakFreezes += amount
         }
         else{
-            throw InsufficientPointsException("u dumb git gud")
+            throw InsufficientPointsException("You have insufficient points to purchase this many Streak Freezes")
         }
     }
 
