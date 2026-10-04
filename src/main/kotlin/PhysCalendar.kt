@@ -4,6 +4,12 @@ import main.activityTypes.ActivityType
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import java.io.File
+import kotlin.time.Clock
+import kotlinx.datetime.*
+
+val customJson = Json {
+    allowSpecialFloatingPointValues = true
+}
 
 @Serializable
 class PhysCalendar {
@@ -31,19 +37,29 @@ class PhysCalendar {
 
     }
 
-    fun checkTodayActivity(){}
+    fun checkTodaySession(): Session? {
+        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        var todaySession = calendar.get(today)
+        if (todaySession == null){
+            return null
 
-    fun checkTommorowActivity(){}
+        } else{
+            return todaySession
+        }
+
+    }
+
+
 
     fun saveGoal(){
         var theFile = File("src/main/data/physCalendarData.json")
-        theFile.writeText(Json.encodeToString(this))
+        theFile.writeText(customJson.encodeToString(this))
     }
 
     fun loadGoal() {
         var theFile = File("src/main/data/physCalendarData.json")
         val input = theFile.readText()
-        val loadedPhysCalendar = Json.decodeFromString<PhysCalendar>(input)
+        val loadedPhysCalendar = customJson.decodeFromString<PhysCalendar>(input)
         this.calendar = loadedPhysCalendar.calendar
 
     }

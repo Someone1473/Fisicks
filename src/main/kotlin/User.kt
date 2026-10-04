@@ -2,7 +2,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import main.customErrors.InsufficientPointsException
 import java.io.File
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.*
+import kotlin.time.Clock
+
 
 @Serializable
 class User {
@@ -18,9 +20,27 @@ class User {
 
     var careerPoints = 0
 
-    fun findStreak(){
+    var currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
+    fun findStreak(physCalendar: PhysCalendar) {
+        var isSessionThere: Session? = physCalendar.calendar.get(currentDate)
+        val yesterdaySessionThere: Session? = physCalendar.calendar.get(currentDate.minus(1, DateTimeUnit.DAY))
+
+        if (isSessionThere == null) {
+            if (yesterdaySessionThere == null || yesterdaySessionThere.finished == false) {
+                if (streakFreezes > 0){
+                    streakFreezes -= 1
+                } else if (streakFreezes == 0) {
+                    streak = 0
+                }
+            }
+
+        } else if (isSessionThere.finished == true) {
+            streak += 1
+
+        }
     }
+
 
     fun updateLongestStreak(){
         if (streak > longestStreak){
@@ -60,13 +80,13 @@ class User {
 
     fun saveUser(){
         var theFile = File("src/main/data/userData.json")
-        theFile.writeText(Json.encodeToString(this))
+        theFile.writeText(customJson.encodeToString(this))
     }
 
     fun loadUser(){
         var theFile = File("src/main/data/userData.json")
         val input = theFile.readText()
-        val loadedUser = Json.decodeFromString<User>(input)
+        val loadedUser = customJson.decodeFromString<User>(input)
         this.careerPoints = loadedUser.careerPoints
         this.name = loadedUser.name
         this.points = loadedUser.points

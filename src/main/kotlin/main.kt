@@ -13,10 +13,9 @@ fun main(){
     var theUser = User()
     var thePhysCalendar = PhysCalendar()
     var theGoal = Goal()
+    var command = ""
 
     while (true)
-
-        var command = ""
 
         command = readln()
 
@@ -27,11 +26,13 @@ fun main(){
 
         } else if (command == "reviewSession"){
 
+        } else if (command == "reviewSession"){
+
         } else if (command == "buyStreakFreeze"){
 
         } else if (command == "checkTodayActiviy"){
 
-        } else if (command == "checkYesterdayActivity"){
+        } else if (command == "setGoal"){
 
         } else{
             println("insert a valid command dummy")
