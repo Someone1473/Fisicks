@@ -25,8 +25,8 @@ class Session {
     }
 
 
-    fun plan(plannedActivityNot: List<ActivityType>, SessionDate: LocalDate){
-        plannedActivities = plannedActivityNot
+    fun plan(plannedActivityInput: List<ActivityType>, SessionDate: LocalDate){
+        plannedActivities = plannedActivityInput
         plannedNetPoints = this.count(plannedActivities)
         date = SessionDate
 
