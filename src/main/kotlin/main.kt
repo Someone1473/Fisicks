@@ -53,11 +53,11 @@ fun main(){
             }
 
             try {
-                var inputtedDate = LocalDate.parse(readln())
+                inputtedDate = LocalDate.parse(readln())
                 thePhysCalendar.addSession(activitiesButCorrectType, inputtedDate)
 
             } catch(e: IllegalArgumentException){
-                println("Please type in a date of format of yyyy-mm-dd.")
+                println("IllegalArgumentException: Please type in a date of format of yyyy-mm-dd.")
             }
 
 

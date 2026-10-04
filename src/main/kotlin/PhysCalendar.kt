@@ -9,13 +9,14 @@ import kotlinx.datetime.*
 
 @Serializable
 class PhysCalendar {
+    var newSession = Session()
 
     var calendar: MutableMap<LocalDate, Session> = mutableMapOf()
 
     fun addSession(plannedActivityNot: List<ActivityType>, SessionDate: LocalDate){
 
         if (calendar.get(SessionDate) == null){
-            var newSession = Session()
+            newSession = Session()
             newSession.plan(plannedActivityNot, SessionDate)
             calendar.put(SessionDate, newSession)
 

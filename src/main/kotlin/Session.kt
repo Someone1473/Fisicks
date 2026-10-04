@@ -5,7 +5,7 @@ import kotlinx.serialization.json.*
 
 @Serializable
 class Session {
-    var date = LocalDate.parse("0067-6-7")
+    var date = LocalDate.parse("0067-06-07")
     var plannedActivities: List<ActivityType> = listOf()
     var finishedActivities: List<ActivityType> = listOf()
     var finished = false
