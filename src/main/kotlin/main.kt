@@ -5,6 +5,8 @@ import Session
 import User
 import activityTypes.allActivities
 import customErrors.InvalidCompException
+import customErrors.MultipleSessionReviewException
+import customErrors.SessionAmountException
 import kotlinx.datetime.LocalDate
 import main.activityTypes.ActivityType
 import main.customErrors.InsufficientPointsException
@@ -13,20 +15,20 @@ fun main(){
     var theUser = User()
     var thePhysCalendar = PhysCalendar()
     var theGoal = Goal()
-    var command = ""
-    var inputtedDate = LocalDate.parse("0067-06-07")
+    var command: String
+    var inputtedDate: LocalDate
     var activities = listOf<String>()
     var userActivityInput: ActivityType?
     var activitiesButCorrectType = mutableListOf<ActivityType>()
     var todaySession: Session?
     var numberOfStreakFreezes: Any?
     var userGoal: Any?
-    theUser.findStreak(thePhysCalendar)
+    var session: Session?
 
     println("Fisicks (Pre-Alpha)")
-    println("------------------------------------------------------")
-    println("Streak: ${theUser.streak}    Points: ${theUser.points}    Career Points: ${theUser.careerPoints}    Goal:${theGoal.goal}")
-    println("------------------------------------------------------")
+    println("--------------------------------------------------------")
+    println("Streak: ${theUser.streak}    Points: ${theUser.points}    Career Points: ${theUser.careerPoints}    Goal: ${theGoal.goal}")
+    println("--------------------------------------------------------")
 
     while (true) {
 
@@ -74,8 +76,20 @@ fun main(){
             }
 
             try {
-                var inputtedDate = LocalDate.parse(readln())
-                thePhysCalendar.reviewSession(activitiesButCorrectType, inputtedDate)
+                inputtedDate = LocalDate.parse(readln())
+                try {
+                    session = thePhysCalendar.calendar.get(inputtedDate)
+                    if (session != null) {
+                        thePhysCalendar.reviewSession(activitiesButCorrectType, inputtedDate)
+                        theUser.addPoints(session)
+                    } else {
+                        println("SessionAmountException: There is no session to review.")
+                    }
+                } catch (e: SessionAmountException){
+                    println("SessionAmountException: ${e.message}")
+                } catch (e: MultipleSessionReviewException) {
+                    println("MultipleSessionReviewException: ${e.message}")
+                }
 
             } catch(e: IllegalArgumentException){
                 println("IllegalArgumentException: Please type in a date of format of yyyy-mm-dd.")
@@ -133,6 +147,11 @@ fun main(){
         theGoal.saveGoal()
         thePhysCalendar.saveCalendar()
         theUser.saveUser()
+        theUser.findStreak(thePhysCalendar)
+
+        println("--------------------------------------------------------")
+        println("Streak: ${theUser.streak}    Points: ${theUser.points}    Career Points: ${theUser.careerPoints}    Goal: ${theGoal.goal}")
+        println("--------------------------------------------------------")
     }
 
 }

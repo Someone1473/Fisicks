@@ -1,3 +1,4 @@
+import customErrors.MultipleSessionReviewException
 import customErrors.SessionAmountException
 import kotlinx.datetime.LocalDate
 import main.activityTypes.ActivityType
@@ -12,9 +13,8 @@ class PhysCalendar {
     var calendar: MutableMap<LocalDate, Session> = mutableMapOf()
 
     fun addSession(plannedActivityNot: List<ActivityType>, SessionDate: LocalDate){
-        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
-        if (calendar.get(today) == null){
+        if (calendar.get(SessionDate) == null){
             var newSession = Session()
             newSession.plan(plannedActivityNot, SessionDate)
             calendar.put(SessionDate, newSession)
@@ -22,7 +22,6 @@ class PhysCalendar {
         } else {
             throw SessionAmountException("You already have a session planned today.")
         }
-
     }
 
     fun reviewSession(finishedActivities: List<ActivityType>, SessionDate: LocalDate){
@@ -30,8 +29,10 @@ class PhysCalendar {
         oldSession = calendar.get(SessionDate)
 
         if (oldSession == null){
-            throw Exception()
+            throw SessionAmountException("There is no session to review.")
+
         } else if (oldSession.finished == true){
+            throw MultipleSessionReviewException("This session has already been reviewed, you aren't allowed to review it twice.")
 
         } else {
             oldSession.review(finishedActivities)
