@@ -5,7 +5,6 @@ import java.io.File
 import kotlinx.datetime.*
 import kotlin.time.Clock
 
-
 @Serializable
 class User {
     var name = ""
@@ -17,9 +16,7 @@ class User {
     var monthlyPointsGoal = 0
     var dateOfLastActivity = LocalDate.parse("0067-06-07")
     var streakFreezePrice = 50
-
     var careerPoints = 0
-
     var currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     fun findStreak(physCalendar: PhysCalendar) {
@@ -37,7 +34,6 @@ class User {
 
         } else if (isSessionThere.finished == true) {
             streak += 1
-
         }
     }
 
