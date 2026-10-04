@@ -24,9 +24,9 @@ fun main(){
     theUser.findStreak(thePhysCalendar)
 
     println("Fisicks (Pre-Alpha)")
-    println("--------------------------")
-    println("Streak: ${theUser.streak}")
-    println("--------------------------")
+    println("------------------------------------------------------")
+    println("Streak: ${theUser.streak}    Points: ${theUser.points}    Career Points: ${theUser.careerPoints}    Goal:${theGoal.goal}")
+    println("------------------------------------------------------")
 
     while (true) {
 
@@ -46,7 +46,7 @@ fun main(){
                 if (userActivityInput != null){
                     activitiesButCorrectType.add(userActivityInput)
                 } else {
-                    throw IllegalArgumentException("Please enter in valid activity names, each one separated by a space.")
+                    println("IllegalArgumentException: Please enter in valid activity names, each one separated by a space.")
                 }
             }
 
@@ -54,8 +54,8 @@ fun main(){
                 var inputtedDate = LocalDate.parse(readln())
                 thePhysCalendar.addSession(activitiesButCorrectType, inputtedDate)
 
-            } catch(e: java.time.format.DateTimeParseException){
-                error("Please type in a date of format of yyyy-mm-dd.")
+            } catch(e: IllegalArgumentException){
+                println("Please type in a date of format of yyyy-mm-dd.")
             }
 
 
@@ -69,7 +69,7 @@ fun main(){
                 if (userActivityInput != null){
                     activitiesButCorrectType.add(userActivityInput)
                 } else {
-                    println ("IllegalArgumentException, Please enter in valid activity names, each one separated by a space.")
+                    println("IllegalArgumentException: Please enter in valid activity names, each one separated by a space.")
                 }
             }
 
@@ -77,8 +77,8 @@ fun main(){
                 var inputtedDate = LocalDate.parse(readln())
                 thePhysCalendar.reviewSession(activitiesButCorrectType, inputtedDate)
 
-            } catch(e: java.time.format.DateTimeParseException){
-
+            } catch(e: IllegalArgumentException){
+                println("IllegalArgumentException: Please type in a date of format of yyyy-mm-dd.")
             }
 
 
@@ -104,10 +104,10 @@ fun main(){
                     theUser.buyStreakFreeze(numberOfStreakFreezes)
 
                 } catch(e: InsufficientPointsException){
-                    println(e.message)
+                    println("InsufficientPointsException: ${e.message}")
                 }
             } catch (e: NumberFormatException){
-                println(e.message)
+                println("NumberFormatException: ${e.message}, please enter a integer")
             }
 
 
@@ -123,18 +123,16 @@ fun main(){
                 }
 
             } else {
-                println("IllegalArgumentException, Please enter in a string")
+                println("Please enter in a string")
             }
 
         } else {
-            println("IllegalArgumentException, Please insert a valid command.")
+            println("Please insert a valid command.")
         }
 
         theGoal.saveGoal()
         thePhysCalendar.saveCalendar()
         theUser.saveUser()
-        theUser.findStreak(thePhysCalendar)
-
     }
 
 }
