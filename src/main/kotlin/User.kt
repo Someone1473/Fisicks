@@ -18,23 +18,29 @@ class User {
     var streakFreezePrice = 50
     var careerPoints = 0
     var currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    var hasCheckToday = mutableMapOf<LocalDate, Boolean>()
 
     fun findStreak(physCalendar: PhysCalendar) {
         var isSessionThere: Session? = physCalendar.calendar.get(currentDate)
         val yesterdaySessionThere: Session? = physCalendar.calendar.get(currentDate.minus(1, DateTimeUnit.DAY))
 
-        if (isSessionThere == null) {
-            if (yesterdaySessionThere == null || yesterdaySessionThere.finished == false) {
-                if (streakFreezes > 0){
-                    streakFreezes -= 1
-                } else if (streakFreezes == 0) {
-                    streak = 0
+        if (hasCheckToday.get(currentDate) == null) {
+            if (isSessionThere == null) {
+                if (yesterdaySessionThere == null || yesterdaySessionThere.finished == false) {
+                    if (streakFreezes > 0) {
+                        streakFreezes -= 1
+                    } else if (streakFreezes == 0) {
+                        streak = 0
+                    }
                 }
-            }
 
-        } else if (isSessionThere.finished == true) {
-            streak += 1
+            } else if (isSessionThere.finished == true) {
+                streak += 1
+
+            }
+            hasCheckToday.put(currentDate, true)
         }
+
     }
 
 
@@ -55,12 +61,12 @@ class User {
     }
 
     fun buyStreakFreeze(amount: Int){
-        if (points > streakFreezePrice * amount){
+        if (points >= streakFreezePrice * amount){
             points -= streakFreezePrice * amount
             streakFreezes += amount
         }
         else{
-            throw InsufficientPointsException("u dumb git gud")
+            throw InsufficientPointsException("You have insufficient points to purchase this many Streak Freezes")
         }
     }
 
@@ -92,6 +98,7 @@ class User {
         this.monthlyPointsGoal = loadedUser.monthlyPointsGoal
         this.dateOfLastActivity = loadedUser.dateOfLastActivity
         this.streakFreezePrice = loadedUser.streakFreezePrice
+        this.hasCheckToday = loadedUser.hasCheckToday
 
 
 
